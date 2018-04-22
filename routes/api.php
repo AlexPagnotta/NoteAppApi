@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Note;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('notes', 'NotesController@index');
+Route::get('notes/{note}', 'NotesController@show');
+Route::post('notes', 'NotesController@store');
+Route::put('notes/{note}', 'NotesController@update');
+Route::delete('notes/{note}', 'NotesController@destroy');
