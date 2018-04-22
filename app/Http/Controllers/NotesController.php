@@ -39,11 +39,9 @@ class NotesController extends Controller
         $note->text = $request->get('text');
 
         if($currentUser->notes()->save($note)){
-            //return $this->response->created();
             return ['' => 'Note Created'];
         } 
         else{
-            //return $this->response->error('could_not_create_note', 500);
             return ['' => 'Could Not Create Note, Error 500'];
         }
             
@@ -57,6 +55,13 @@ class NotesController extends Controller
      */
     public function show($id)
     {
+        $currentUser = JWTAuth::parseToken()->authenticate();
+
+        $note = $currentUser->notes()->find($id);
+    
+        if(!$note)
+             return ['' => 'Note not found'];
+    
         return $note;
     }
 
@@ -69,9 +74,18 @@ class NotesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $note->update($request->all());
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-        return response()->json($note, 200);
+        $note = $currentUser->notes()->find($id);
+        if(!$note)
+             return ['' => 'Could not find note'];
+    
+        $note->fill($request->all());
+    
+        if($note->save())
+            return ['' => 'Note Updated'];
+        else
+            return ['' => 'Could not update note, Error 500'];
     }
 
     /**
@@ -82,8 +96,16 @@ class NotesController extends Controller
      */
     public function destroy($id)
     {   
-        $note->delete();
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-        return response()->json(null, 204);
+        $note = $currentUser->notes()->find($id);
+    
+        if(!$note)
+            return ['' => 'Could not find note'];
+    
+        if($note->delete())
+            return ['' => 'Note Deleted'];
+        else
+            return ['' => 'Could not delete note, Error 500'];
     }
 }

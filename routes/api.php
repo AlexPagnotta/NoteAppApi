@@ -22,9 +22,9 @@ Route::post('user/register', 'APIRegisterController@register');
 Route::post('user/login', 'APILoginController@login');
 
 Route::get('notes', 'NotesController@index');
-Route::get('notes/{note}', 'NotesController@show');
+Route::get('notes/{id}', 'NotesController@show');
 Route::post('notes', 'NotesController@store');
-Route::put('notes/{note}', 'NotesController@update');
-Route::delete('notes/{note}', 'NotesController@destroy');
+Route::put('notes/{id}', 'NotesController@update');
+Route::delete('notes/{id}', 'NotesController@destroy');
 
 
