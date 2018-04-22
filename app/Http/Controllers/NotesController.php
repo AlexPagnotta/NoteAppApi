@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Note;
+use JWTAuth;
 
 class NotesController extends Controller
 {
@@ -14,7 +15,12 @@ class NotesController extends Controller
      */
     public function index()
     {
-        return Note::all();
+        $currentUser = JWTAuth::parseToken()->authenticate();
+        return $currentUser
+        ->notes()
+        ->orderBy('created_at', 'DESC')
+        ->get()
+        ->toArray();
     }
 
     /**
@@ -25,9 +31,22 @@ class NotesController extends Controller
      */
     public function store(Request $request)
     {
-        $note = Note::create($request->all());
+        $currentUser = JWTAuth::parseToken()->authenticate();
 
-        return response()->json($note, 201);
+        $note = new Note;
+
+        $note->title = $request->get('title');
+        $note->text = $request->get('text');
+
+        if($currentUser->notes()->save($note)){
+            //return $this->response->created();
+            return ['' => 'Note Created'];
+        } 
+        else{
+            //return $this->response->error('could_not_create_note', 500);
+            return ['' => 'Could Not Create Note, Error 500'];
+        }
+            
     }
 
     /**

@@ -26,3 +26,5 @@ Route::get('notes/{note}', 'NotesController@show');
 Route::post('notes', 'NotesController@store');
 Route::put('notes/{note}', 'NotesController@update');
 Route::delete('notes/{note}', 'NotesController@destroy');
+
+
