@@ -28,7 +28,12 @@ class APIRegisterController extends Controller
         ]);
         $user = User::first();
         $token = JWTAuth::fromUser($user);
-        
-        return Response::json(compact('token'));
+
+        $data = 
+            ['token' => $token,
+            "name"=>$user->name,
+            "email"=>$user->email];
+
+        return Response::json($data);
     }
 }
