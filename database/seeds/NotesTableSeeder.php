@@ -11,6 +11,6 @@ class NotesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Note::class, 30)->create();
+        factory(App\Note::class, 300)->create();
     }
 }
